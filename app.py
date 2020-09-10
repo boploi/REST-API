@@ -22,7 +22,7 @@ def hoa_info():
     return hoa
 
 
-@app.route('/dividenum', methods='POST')
+@app.route('/dividenum', methods=['POST'])
 def divide_three_num():
     # get a,b,c from posted data
     dataDict = request.get_json()
