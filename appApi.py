@@ -52,7 +52,22 @@ class Subtract(Resource):
     def post(self):
         data_dict = request.get_json()
         status_code = check_posted_data(data_dict, 'subtract')
-
+        if status_code != 200:
+            status = {
+                'Message': 'An Error happened',
+                'Status Code': 322
+            }
+            return jsonify(status)
+        a = data_dict["a"]
+        b = data_dict["b"]
+        divide = a/b
+        ret_json = {
+            'divide': divide,
+            'Status Code': 200
+        }
+        return jsonify(ret_json)
+    
+    
 class Divide(Resource):
     pass
 
@@ -62,6 +77,7 @@ class Multiply(Resource):
 
 
 api.add_resource(Add, '/add')
+api.add_resource(Subtract, '/subtract')
 
 if __name__ == '__main__':
     app.run(debug=True)
