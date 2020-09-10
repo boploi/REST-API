@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -26,6 +26,8 @@ def hoa_info():
 def divide_three_num():
     # get a,b,c from posted data
     dataDict = request.get_json()
+    if "c" not in dataDict:
+        return "ERROR, insert c value", 305
     a = dataDict["a"]
     b = dataDict["b"]
     c = dataDict["c"]
@@ -33,7 +35,7 @@ def divide_three_num():
     div = a / b / c
     # add to json
     retJson = {
-        'divided': 'div'
+        'divided': div
     }
     # jsonify
     return retJson
