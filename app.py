@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -21,6 +21,22 @@ def hoa_info():
     }
     return hoa
 
+
+@app.route('/dividenum', methods='POST')
+def divide_three_num():
+    # get a,b,c from posted data
+    dataDict = request.get_json()
+    a = dataDict["a"]
+    b = dataDict["b"]
+    c = dataDict["c"]
+    # divide three num
+    div = a / b / c
+    # add to json
+    retJson = {
+        'divided': 'div'
+    }
+    # jsonify
+    return retJson
 
 if __name__ == '__main__':
     app.run(debug=True)
