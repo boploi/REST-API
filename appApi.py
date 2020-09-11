@@ -11,14 +11,16 @@ def index_page():
 
 
 def check_posted_data(posted_data, function_name):
-    if function_name == 'add':
+    if function_name == 'add' or function_name == 'subtract' or function_name == 'multiply':
         if "a" not in posted_data or "b" not in posted_data:
             return 301
         else:
             return 200
-    if function_name == 'subtract':
-        if 'a' not in posted_data or b not in posted_data:
-            return 303
+    elif function_name == 'divide':
+        if 'a' not in posted_data or 'b' not in posted_data:
+            return 301
+        elif posted_data["b"] == 0:
+            return 302
         else:
             return 200
 
@@ -43,7 +45,7 @@ class Add(Resource):
         add = a + b
         ret_json = {
             'Message': add,
-            'Status code': 200
+            'Status code': status_code
         }
         return jsonify(ret_json)
 
@@ -52,16 +54,66 @@ class Subtract(Resource):
     def post(self):
         data_dict = request.get_json()
         status_code = check_posted_data(data_dict, 'subtract')
+        if status_code != 200:
+            ret_json = {
+                'Message': 'An Error happened',
+                'Status code': status_code
+            }
+            return jsonify(ret_json)
+        a = data_dict["a"]
+        b = data_dict["b"]
+        sub = a - b
+        ret_sub = {
+            'Message': sub,
+            'Status code': status_code
+        }
+        return jsonify(ret_sub)
+
 
 class Divide(Resource):
-    pass
+    def post(self):
+        data_dict = request.get_json()
+        status_code = check_posted_data(data_dict, 'divide')
+        if status_code != 200:
+            ret_json = {
+                'Message': 'An Error happened',
+                'Status code': status_code
+            }
+            return jsonify(ret_json)
+        a = data_dict["a"]
+        b = data_dict["b"]
+        div = (a*1.0)/b
+        ret_sub = {
+            'Message': div,
+            'Status code': status_code
+        }
+        return jsonify(ret_sub)
 
 
 class Multiply(Resource):
-    pass
+    def post(self):
+        data_dict = request.get_json()
+        status_code = check_posted_data(data_dict, 'multiply')
+        if status_code != 200:
+            ret_json = {
+                'Message': 'An Error happened',
+                'Status code': status_code
+            }
+            return jsonify(ret_json)
+        a = data_dict["a"]
+        b = data_dict["b"]
+        multi = a * b
+        ret_mul = {
+            'Result': multi,
+            'Status code': 200
+        }
+        return jsonify(ret_mul)
 
 
 api.add_resource(Add, '/add')
+api.add_resource(Subtract, '/subtract')
+api.add_resource(Multiply, '/multiply')
+api.add_resource(Divide, '/divide')
 
 if __name__ == '__main__':
     app.run(debug=True)
